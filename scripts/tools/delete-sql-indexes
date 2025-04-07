@@ -1,0 +1,25 @@
+#!/bin/bash
+if test -f .env; then
+	source .env
+else
+	echo "No environemnt variables file found. Exiting"
+	exit 255
+fi
+
+DATABASE=${1:-${TESSDB_URL}}
+
+echo "Deleting SQLite Index tess_id_readings_i on Database ${DATABASE}"
+nice -n 19 ionice -c3 sqlite3 ${DATABASE} <<EOF
+	DROP INDEX IF EXISTS tess_id_readings_i;
+EOF
+
+echo "Deleting SQLite Index tess_id_readings4c_i on Database ${DATABASE}"
+nice -n 19 ionice -c3 sqlite3 ${DATABASE} <<EOF
+	DROP INDEX IF EXISTS tess_id_readings4c_i;
+EOF
+
+echo "Compacting database ${DATABASE}"
+nice -n 19 ionice -c3 sqlite3 ${DATABASE} <<EOF
+	VACUUM;
+EOF
+echo "Processing database ${DATABASE} ended!"

@@ -1,0 +1,8 @@
+#!/bin/bash
+# ----------------------------------------------------------------------
+# Copyright (c) 2023 Rafael Gonzalez.
+#
+# See the LICENSE file for details
+# ----------------------------------------------------------------------
+# This script pauses tessdb writting activity
+sudo systemctl kill -s USR2 tessdb.service

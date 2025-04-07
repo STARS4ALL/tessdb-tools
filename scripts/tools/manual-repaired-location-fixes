@@ -1,0 +1,190 @@
+#!/bin/bash
+
+
+# Apply location fixes to -1 location IDs to all
+# thtometers that has been repaired or substituted (same name, different MACs)
+
+
+if test -f .env; then
+	source .env
+else
+	echo "No environemnt variables file found. Exiting"
+	exit 255
+fi
+
+DATABASE=${1:-${TESSDB_URL}}
+
+echo "Applying location fixed for repaired photometers. This may take a while"
+nice -n 19 ionice -c3 sqlite3 ${DATABASE} <<EOF
+.echo on
+
+PRAGMA foreign_keys = OFF;
+BEGIN TRANSACTION;
+
+---------------------- stars201 ----------------------
+-- READINGS LOCATION UPDATE FOR  4C:75:25:27:43:56
+UPDATE tess_t SET location_id = 61 WHERE location_id = -1 AND tess_id IN (2241, 2790);
+UPDATE tess_readings_t SET location_id = 61 WHERE location_id = -1 AND tess_id IN (2241, 2790);
+
+---------------------- stars218 ----------------------
+-- READINGS LOCATION UPDATE FOR CC:50:E3:16:7E:67
+UPDATE tess_t SET location_id = 130 WHERE location_id = -1 AND tess_id IN (1754, 1998);
+UPDATE tess_readings_t SET location_id = 130 WHERE location_id = -1 AND tess_id IN (1754, 1998);
+
+
+-- READINGS LOCATION UPDATE FOR 4C:75:25:27:43:56
+UPDATE tess_t SET location_id = 130 WHERE location_id = -1 AND tess_id IN (2291, 2792);
+UPDATE tess_readings_t SET location_id = 130 WHERE location_id = -1 AND tess_id IN (2291, 2792);
+
+---------------------- stars271 ----------------------
+-- READINGS LOCATION UPDATE FOR 4C:75:25:28:89:C1
+UPDATE tess_t SET location_id = 279 WHERE location_id = -1 AND tess_id IN (2244, 2791 );
+UPDATE tess_readings_t SET location_id = 279 WHERE location_id = -1 AND tess_id IN (2244, 2791 );
+
+---------------------- stars288 ----------------------
+-- READINGS LOCATION UPDATE FOR 98:F4:AB:B2:7B:F8
+UPDATE tess_t SET location_id = 77 WHERE location_id = -1 AND tess_id IN (1293, 1708);
+UPDATE tess_readings_t SET location_id = 77 WHERE location_id = -1 AND tess_id IN (1293, 1708);
+
+---------------------- stars291 ----------------------
+-- READINGS LOCATION UPDATE FOR 5C:CF:7F:76:6A:33
+UPDATE tess_t SET location_id = 179 WHERE location_id = -1 AND tess_id IN (1874 );
+UPDATE tess_readings_t SET location_id = 179 WHERE location_id = -1 AND tess_id IN (1874 );
+
+-- READINGS LOCATION UPDATE FOR CC:50:E3:16:7E:67,
+UPDATE tess_t SET location_id = 130 WHERE location_id = -1 AND tess_id IN (1754, 1998);
+UPDATE tess_readings_t SET location_id = 130 WHERE location_id = -1 AND tess_id IN (1754, 1998);
+
+-- READINGS LOCATION UPDATE FOR 4C:75:25:27:FF:B8
+UPDATE tess_t SET location_id = 130  WHERE location_id = -1 AND tess_id IN ( 2299, 2793);
+UPDATE tess_readings_t SET location_id = 130  WHERE location_id = -1 AND tess_id IN ( 2299, 2793);
+
+---------------------- stars34 ----------------------
+-- READINGS LOCATION UPDATE FOR 5C:CF:7F:8C:03:39
+UPDATE tess_t SET location_id = 47 WHERE location_id = -1 AND tess_id IN (2423);
+UPDATE tess_readings_t SET location_id = 47 WHERE location_id = -1 AND tess_id IN (2423);
+
+---------------------- stars387 ----------------------
+-- READINGS LOCATION UPDATE FOR 5C:CF:7F:76:65:54
+UPDATE tess_t SET location_id = 178  WHERE location_id = -1 AND tess_id IN (454, 1704, 2204 );
+UPDATE tess_readings_t SET location_id = 178  WHERE location_id = -1 AND tess_id IN (454, 1704, 2204 );
+
+---------------------- stars40 ----------------------
+-- READINGS LOCATION UPDATE FOR 5C:CF:7F:8B:B9:DF
+UPDATE tess_t SET location_id = 43 WHERE location_id = -1 AND tess_id IN (1949 );
+UPDATE tess_readings_t SET location_id = 43 WHERE location_id = -1 AND tess_id IN (1949 );
+
+---------------------- stars403 ----------------------
+-- READINGS LOCATION UPDATE FOR 24:A1:60:2F:98:A7
+UPDATE tess_t SET location_id = 240 WHERE location_id = -1 AND tess_id IN (1904, 1976, 2887 );
+UPDATE tess_readings_t SET location_id = 240 WHERE location_id = -1 AND tess_id IN (1904, 1976, 2887 );
+
+---------------------- stars41 ----------------------
+-- READINGS LOCATION UPDATE FOR 5C:CF:7F:8B:E3:8B
+UPDATE tess_t SET location_id = 43 WHERE location_id = -1 AND tess_id IN (1947 );
+UPDATE tess_readings_t SET location_id = 43 WHERE location_id = -1 AND tess_id IN (1947 );
+
+---------------------- stars411 ----------------------
+-- READINGS LOCATION UPDATE FOR 60:01:94:2E:9E:76
+UPDATE tess_t SET location_id = 377 WHERE location_id = -1 AND tess_id IN (446, 1705 );
+UPDATE tess_readings_t SET location_id = 377 WHERE location_id = -1 AND tess_id IN (446, 1705 );
+
+---------------------- stars425 ----------------------
+-- READINGS LOCATION UPDATE FOR 60:01:94:2E:29:4A
+UPDATE tess_t SET location_id = 391 WHERE location_id = -1 AND tess_id IN (447, 577 );
+UPDATE tess_readings_t SET location_id = 391 WHERE location_id = -1 AND tess_id IN (447, 577 );
+
+---------------------- stars48 ----------------------
+-- READINGS LOCATION UPDATE FOR 5C:CF:7F:00:B6:90
+UPDATE tess_t SET location_id = 51  WHERE location_id = -1 AND tess_id IN ( 1697);
+UPDATE tess_readings_t SET location_id = 51  WHERE location_id = -1 AND tess_id IN ( 1697);
+
+---------------------- stars60 ----------------------
+-- READINGS LOCATION UPDATE FOR 18:FE:34:D3:46:1D
+UPDATE tess_t SET location_id = 41 WHERE location_id = -1 AND tess_id IN ( 656);
+UPDATE tess_readings_t SET location_id = 41 WHERE location_id = -1 AND tess_id IN ( 656);
+
+---------------------- stars62 ----------------------
+-- READINGS LOCATION UPDATE FOR 5C:CF:7F:8B:E2:A0
+UPDATE tess_t SET location_id = 14  WHERE location_id = -1 AND tess_id IN ( 1743);
+UPDATE tess_readings_t SET location_id = 14  WHERE location_id = -1 AND tess_id IN ( 1743);
+
+---------------------- stars624 ----------------------
+-- READINGS LOCATION UPDATE FOR 98:F4:AB:B2:7B:53
+UPDATE tess_t SET location_id = 266 WHERE location_id = -1 AND tess_id IN ( 1839, 1951, 1952, 2109);
+UPDATE tess_readings_t SET location_id = 266 WHERE location_id = -1 AND tess_id IN ( 1839, 1951, 1952, 2109);
+
+---------------------- stars64 ----------------------
+-- READINGS LOCATION UPDATE FOR 5C:CF:7F:8B:BB:8E
+UPDATE tess_t SET location_id = 34 WHERE location_id = -1 AND tess_id IN (1851 );
+UPDATE tess_readings_t SET location_id = 34 WHERE location_id = -1 AND tess_id IN (1851 );
+
+---------------------- stars65 ----------------------
+-- READINGS LOCATION UPDATE FOR 18:FE:34:D3:49:17,
+UPDATE tess_t SET location_id = 49 WHERE location_id = -1 AND tess_id IN (1764 );
+UPDATE tess_readings_t SET location_id = 49 WHERE location_id = -1 AND tess_id IN (1764 );
+
+---------------------- stars665 ----------------------
+-- READINGS LOCATION UPDATE FOR 4C:75:25:27:A3:A6,
+UPDATE tess_t SET location_id = 490 WHERE location_id = -1 AND tess_id IN ( 2285, 3010);
+UPDATE tess_readings_t SET location_id = 490 WHERE location_id = -1 AND tess_id IN ( 2285, 3010);
+
+---------------------- stars69 ----------------------
+-- READINGS LOCATION UPDATE FOR 18:FE:34:D3:48:10,
+UPDATE tess_t SET location_id = 20 WHERE location_id = -1 AND tess_id IN ( 2947);
+UPDATE tess_readings_t SET location_id = 20 WHERE location_id = -1 AND tess_id IN ( 2947);
+
+---------------------- stars70 ----------------------
+-- READINGS LOCATION UPDATE FOR 8C:CE:4E:D5:36:8F
+UPDATE tess_t SET location_id = 15 WHERE location_id = -1 AND tess_id IN ( 1901, 1980, 2992);
+UPDATE tess_readings_t SET location_id = 15 WHERE location_id = -1 AND tess_id IN ( 1901, 1980, 2992);
+
+ ---------------------- stars703 ----------------------
+-- READINGS LOCATION UPDATE FOR C4:AD:F1:AB:62:24
+UPDATE tess_t SET location_id = 113 WHERE location_id = -1 AND tess_id IN (3006 );
+UPDATE tess_readings_t SET location_id = 113 WHERE location_id = -1 AND tess_id IN (3006 );
+
+---------------------- stars704 ----------------------
+-- READINGS LOCATION UPDATE FOR D0:46:C9:D1:08:F0
+UPDATE tess_t SET location_id = 609 WHERE location_id = -1 AND tess_id IN ( 3004);
+UPDATE tess_readings_t SET location_id = 609 WHERE location_id = -1 AND tess_id IN ( 3004);
+
+---------------------- stars705 ----------------------
+-- READINGS LOCATION UPDATE FOR C8:C9:A3:FC:F4:AC
+UPDATE tess_t SET location_id = 609 WHERE location_id = -1 AND tess_id IN (3007 );
+UPDATE tess_readings_t SET location_id = 609 WHERE location_id = -1 AND tess_id IN (3007 );
+
+---------------------- stars706 ----------------------
+-- READINGS LOCATION UPDATE FOR C8:C9:A3:FC:C2:A4
+UPDATE tess_t SET location_id = 609 WHERE location_id = -1 AND tess_id IN (3005 );
+UPDATE tess_readings_t SET location_id = 609 WHERE location_id = -1 AND tess_id IN (3005 );
+
+---------------------- stars707 ----------------------
+-- READINGS LOCATION UPDATE FOR C8:C9:A3:FA:F2:84
+UPDATE tess_t SET location_id = 609 WHERE location_id = -1 AND tess_id IN ( 3047);
+UPDATE tess_readings_t SET location_id = 609 WHERE location_id = -1 AND tess_id IN ( 3047);
+
+---------------------- stars75 ----------------------
+-- READINGS LOCATION UPDATE FOR 5C:CF:7F:82:8D:8B
+UPDATE tess_t SET location_id = 24 WHERE location_id = -1 AND tess_id IN ( 3009);
+UPDATE tess_readings_t SET location_id = 24 WHERE location_id = -1 AND tess_id IN ( 3009);
+
+---------------------- stars76 ----------------------
+-- READINGS LOCATION UPDATE FOR 18:FE:34:CF:ED:70
+UPDATE tess_t SET location_id = 24  WHERE location_id = -1 AND tess_id IN (1829 );
+UPDATE tess_readings_t SET location_id = 24  WHERE location_id = -1 AND tess_id IN (1829 );
+
+---------------------- stars791 ----------------------
+-- READINGS LOCATION UPDATE FOR 80:64:6F:AC:AD:F3,
+UPDATE tess_t SET location_id = 412 WHERE location_id = -1 AND tess_id IN (3050 );
+UPDATE tess_readings_t SET location_id = 412 WHERE location_id = -1 AND tess_id IN (3050 );
+
+--------------------- stars90 ----------------------
+-- READINGS LOCATION UPDATE FOR 8C:CE:4E:D6:23:2A,
+UPDATE tess_t SET location_id = 93 WHERE location_id = -1 AND tess_id IN ( 1897, 1974);
+UPDATE tess_readings_t SET location_id = 93 WHERE location_id = -1 AND tess_id IN ( 1897, 1974);
+
+COMMIT;
+PRAGMA foreign_keys = ON;
+
+EOF

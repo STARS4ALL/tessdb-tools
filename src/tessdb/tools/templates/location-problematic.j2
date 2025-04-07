@@ -1,0 +1,4 @@
+#,stars,Longitud,Latitud
+{% for location in locations -%}
+{{ location['#'] }},{{ location.stars }},{{ location.Longitud }},{{ location.Latitud }}
+{% endfor -%}

@@ -1,0 +1,20 @@
+#!/bin/bash
+if test -f .env; then
+	source .env
+else
+	echo "No environemnt variables file found. Exiting"
+	exit 255
+fi
+
+DATABASE=${1:-${TESSDB_URL}}
+
+echo "Creating SQLite Index tess_id_readings_i on Database ${DATABASE} table tess_readings_t"
+nice -n 19 ionice -c3 sqlite3 ${DATABASE} <<EOF
+	CREATE INDEX IF NOT EXISTS tess_id_readings_i ON tess_readings_t(tess_id);
+EOF
+
+echo "Creating SQLite Index tess_id_readings4c_i on Database ${DATABASE} table tess_readings4c_t"
+nice -n 19 ionice -c3 sqlite3 ${DATABASE} <<EOF
+	CREATE INDEX IF NOT EXISTS tess_id_readings4c_i ON tess_readings4c_t(tess_id);
+EOF
+

@@ -1,0 +1,48 @@
+#!/bin/bash
+if test -f .env; then
+	source .env
+else
+	echo "No environemnt variables file found. Exiting"
+	exit 255
+fi
+
+DATABASE=${1:-${TESSDB_URL}}
+SECS=3
+
+FILES=$(ls -1 sql/*.sql)
+if [ "$?" -ne "0" ]; then
+	echo "No SQL Files to process. Exiting."
+	exit 0
+fi
+
+echo "Creating SQLite Index tess_id_readings_i on Database ${DATABASE} table tess_readings_t"
+nice -n 19 ionice -c3 sqlite3 ${DATABASE} <<EOF
+	CREATE INDEX IF NOT EXISTS tess_id_readings_i ON tess_readings_t(tess_id);
+	CREATE INDEX IF NOT EXISTS tess_id_readings4c_i ON tess_readings4c_t(tess_id);
+EOF
+
+if ! test -d sql/processed; then
+  mkdir -p sql/processed
+fi
+
+for FILE in $FILES
+do
+	echo "sqlite3 ${DATABASE} < ${FILE}"
+	/usr/bin/time --format='%C took %e seconds' sqlite3 ${DATABASE} < ${FILE}
+	mv ${FILE} sql/processed || exit 255
+	echo "sleeping for $SECS seconds so that we can abort with <CTRL-C>"
+	sleep ${SECS}
+done
+
+
+echo "Deleting SQLite Index tess_id_readings_i on Database ${DATABASE}"
+nice -n 19 ionice -c3 sqlite3 ${DATABASE} <<EOF
+	DROP INDEX IF EXISTS tess_id_readings_i;
+	DROP INDEX IF EXISTS tess_id_readings4c_i;
+EOF
+
+echo "Compacting database ${DATABASE}"
+nice -n 19 ionice -c3 sqlite3 ${DATABASE} <<EOF
+	VACUUM;
+EOF
+echo "Processing database ${DATABASE} ended!"

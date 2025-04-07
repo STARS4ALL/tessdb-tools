@@ -1,0 +1,30 @@
+#!/bin/bash
+if test -f .env; then
+	source .env
+else
+	echo "No environemnt variables file found. Exiting"
+	exit 255
+fi
+
+DATABASE=${1:-${TESSDB_URL}}
+SECS=3
+
+FILES=$(ls -1 sql/*.sql)
+if [ "$?" -ne "0" ]; then
+	echo "No SQL Files to process. Exiting."
+	exit 0
+fi
+
+if ! test -d sql/processed; then
+  mkdir -p sql/processed
+fi
+
+for FILE in $FILES
+do
+	echo "sqlite3 ${DATABASE} < ${FILE}"
+	nice -n 19 ionice -c3 /usr/bin/time --format='%C took %e seconds' sqlite3 ${DATABASE} < ${FILE}
+	mv ${FILE} sql/processed || exit 255
+	sleep ${SECS}
+done
+
+echo "Processing database ${DATABASE} ended!"
