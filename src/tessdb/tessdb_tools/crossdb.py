@@ -9,34 +9,40 @@
 # System wide imports
 # -------------------
 
-import os
-import logging
+import csv
 import functools
+import logging
+import os
 
 # -------------------
 # Third party imports
 # -------------------
-
 import requests
-
 from lica.cli import execute
-from lica.validators import vdir
 from lica.csv import write_csv
-from lica.sqlite import open_database
 from lica.jinja2 import render_from
+from lica.sqlite import open_database
+from lica.validators import vdir
+
+import tessdb.tessdb_tools.mongodb as mdb
+import tessdb.tessdb_tools.tessdb as tdb
 
 # --------------
 # local imports
 # -------------
-
 from ._version import __version__
-
-import tessdb.tools.tessdb as tdb
-import tessdb.tools.mongodb as mdb
-
-from .dbutils import common_A_B_items, in_A_not_in_B, filter_and_flatten, filter_selected_keys
-from .dbutils import group_by_place, group_by_name, group_by_coordinates, group_by_mac
-from .dbutils import distance, get_mongo_api_url
+from .dbutils import (
+    common_A_B_items,
+    distance,
+    filter_and_flatten,
+    filter_selected_keys,
+    get_mongo_api_url,
+    group_by_coordinates,
+    group_by_mac,
+    group_by_name,
+    group_by_place,
+    in_A_not_in_B,
+)
 
 # ----------------
 # Module constants
@@ -94,7 +100,7 @@ def common_mac_check(keys, mongo_iterable, tessdb_iterable):
     result = list()
     for key in sorted(keys):
         if len(mongo_iterable[key]) > 1:
-            log.warn("Skippiing %s because it is duplicated: %s", key, mongo_iterable[key])
+            log.warning("Skippiing %s because it is duplicated: %s", key, mongo_iterable[key])
         else:
             mongo_mac = mongo_iterable[key][0]["mac"]
             tessdb_mac = tessdb_iterable[key][0]["mac"]
@@ -114,14 +120,14 @@ def common_zp_check(keys, mongo_iterable, tessdb_iterable):
     result = list()
     for key in sorted(keys):
         if len(mongo_iterable[key]) > 1:
-            log.warn("Skippiing %s because it is duplicated: %s", key, mongo_iterable[key])
+            log.warning("Skippiing %s because it is duplicated: %s", key, mongo_iterable[key])
         else:
             mongo_zp = mongo_iterable[key][0]["zero_point"]
             tessdb_zp = tessdb_iterable[key][0]["zero_point"]
             tessdb_mac = tessdb_iterable[key][0]["mac"]
             if mongo_zp != tessdb_zp:
                 if tessdb_zp < 19.0:
-                    log.warn("Fake tessdb ZP %s for %s, (%s)", tessdb_zp, key, tessdb_mac)
+                    log.warning("Fake tessdb ZP %s for %s, (%s)", tessdb_zp, key, tessdb_mac)
                 else:
                     result.append(key)
                     log.debug(
@@ -182,7 +188,7 @@ def do_update_photometer(mongo_output_list, simulated):
                 log.info("Changing %s MAC: (%s) -> (%s)", row["name"], oldmac, row["mac"])
             mdb.mongo_api_update(url, body, oldmac, simulated)
         except ValueError:
-            log.warn("Ignoring update photometer info for item %s (%s)", row["name"], oldmac)
+            log.warning("Ignoring update photometer info for item %s (%s)", row["name"], oldmac)
         except requests.exceptions.HTTPError as e:
             log.error(f"{e}, RESP. BODY = {e.response.text}")
 
