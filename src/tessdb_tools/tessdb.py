@@ -94,7 +94,7 @@ render = functools.partial(render_from, package)
 
 def get_as_list(field, phot_dict):
     def _collect(rows):
-        return sorted(set(row[field] for row in rows))
+        return sorted({row[field] for row in rows})
 
     result = dict(zip(phot_dict.keys(), map(_collect, phot_dict.values())))
     return result
@@ -616,9 +616,9 @@ def photometers_complicated(connection):
     only_repaired = photometers_repaired(connection)
     only_renamed = photometers_renamed(connection)
     keys = total[0].keys()
-    total = set(list(zip(*item.items()))[1] for item in total)
-    only_repaired = set(list(zip(*item.items()))[1] for item in only_repaired)
-    only_renamed = set(list(zip(*item.items()))[1] for item in only_renamed)
+    total = {list(zip(*item.items()))[1] for item in total}
+    only_repaired = {list(zip(*item.items()))[1] for item in only_repaired}
+    only_renamed = {list(zip(*item.items()))[1] for item in only_renamed}
     total = list(total - only_repaired - only_renamed)
     output = [dict(zip(keys, item)) for item in total]
     return output
