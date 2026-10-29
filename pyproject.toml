@@ -42,11 +42,11 @@ Homepage = "https://github.com/STARS4ALL/tessdb-tools"
 Repository = "https://github.com/STARS4ALL/tessdb-tools.git"
 
 [project.scripts]
-mongo-db = "tessdb.tools.mongodb:main"
-tess-db = "tessdb.tools.tessdb:main"
-zp-tess =  "tessdb.tools.zptess:main"
-cross-db =  "tessdb.tools.crossdb:main"
-fix-zp = "tessdb.tools.adhoc:main"
+mongo-db = "tessdb_tools.mongodb:main"
+tess-db = "tessdb_tools.tessdb:main"
+zp-tess =  "tessdb_tools.zptess:main"
+cross-db =  "tessdb_tools.crossdb:main"
+fix-zp = "tessdb_tools.adhoc:main"
 
 [[tool.uv.index]]
 name = "testpypi"
