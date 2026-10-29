@@ -591,7 +591,7 @@ def remap_mac(input_iterable):
 
 
 def merge_info(input_iterable, nominatim_iterable):
-    output = list()
+    output = []
     for i in range(0, len(input_iterable)):
         row = {**input_iterable[i], **nominatim_iterable[i]}
         output.append(row)
@@ -702,7 +702,7 @@ def do_create_photometer(url, path, delimiter, names, simulated):
         mongo_output_list = filter_by_names(mongo_output_list, names)
         log.info("filtered up to %d items", len(mongo_output_list))
     for row in mongo_output_list:
-        body = mongo_api_body_photometer(row, list(), create=True)
+        body = mongo_api_body_photometer(row, [], create=True)
         log.info(
             "Creating new MongoDB entry with photometer info: %s (%s)", row["name"], row["mac"]
         )
@@ -817,7 +817,7 @@ def do_check_mac_format(mongo_input_list):
 
 
 def do_check_etc_utc(mongo_input_list):
-    names = list()
+    names = []
     for item in mongo_input_list:
         tz = item["timezone"].upper()
         if tz.startswith("ETC") or tz.startswith("UTC"):
@@ -836,7 +836,7 @@ def do_check_etc_utc(mongo_input_list):
 
 
 def do_check_filter(mongo_input_list):
-    names = list()
+    names = []
     for item in mongo_input_list:
         if item["filters"] is None:
             names.append(item["name"])
@@ -851,7 +851,7 @@ def do_check_filter(mongo_input_list):
 
 
 def do_check_zp(mongo_input_list):
-    names = list()
+    names = []
     for item in mongo_input_list:
         if item["zero_point"] is None:
             names.append(item["name"])
@@ -869,7 +869,7 @@ def do_check_zp(mongo_input_list):
 
 
 def do_check_location_metadata(mongo_input_list):
-    names = list()
+    names = []
     for item in mongo_input_list:
         for key in ("place", "town", "sub_region", "region", "country", "timezone"):
             if item.get(key) is None:

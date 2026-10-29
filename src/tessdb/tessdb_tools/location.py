@@ -165,7 +165,7 @@ def repaired_photometers_with_locations_from_tessdb(connection):
 
 
 def new_photometer_location(mongo_db_input_dict, tessdb_input_dict):
-    photometers = list()
+    photometers = []
     for name, value in sorted(mongo_db_input_dict.items()):
         assert len(value) == 1
         row = value[0]
@@ -201,7 +201,7 @@ def check_same_location_metadata(mongo_row, tessdb_sequence):
 
 
 def existing_photometer_location(mongo_db_input_dict, tessdb_input_dict, connection):
-    inserters, updaters, metas = list(), list(), list()
+    inserters, updaters, metas = [], [], []
     n_inserts = 0
     n_updates = 0
     n_metas = 0

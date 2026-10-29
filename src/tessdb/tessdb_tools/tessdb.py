@@ -130,20 +130,20 @@ def coordinates_from_location_id(connection, location_id):
 
 def photometers_with_locations(connection, classification):
     name_mac_list = selected_name_mac_list(connection, classification)
-    result = list()
+    result = []
     cursor = connection.cursor()
     for row in name_mac_list:
         params = {"name": row["name"], "mac": row["mac"], "valid_state": row["valid_state"]}
         cursor.execute(
             """
-            SELECT  :name, mac_address, :valid_state, tess_id, valid_state, model, firmware, 
+            SELECT  :name, mac_address, :valid_state, tess_id, valid_state, model, firmware,
             nchannels, zp1, filter1, zp2, filter2, zp3, filter3, zp4, filter4,
             cover_offset, fov, azimuth, altitude,
             longitude, latitude, place, town, sub_region, country, timezone,
             contact_name, contact_email, organization -- This should be removed at some point
             FROM tess_t AS t
             JOIN location_t USING(location_id)
-            WHERE mac_address = :mac 
+            WHERE mac_address = :mac
             """
         )
         temp = [
@@ -275,7 +275,7 @@ def readings_unknown_observer(connection, name_mac_list, known_flag, threshold=0
 
 def photometers_fake_zero_points(connection, name_mac_list, threshold=18.5):
     cursor = connection.cursor()
-    result = list()
+    result = []
     for row in name_mac_list:
         params = {
             "name": row["name"],
@@ -303,7 +303,7 @@ def photometers_fake_zero_points(connection, name_mac_list, threshold=18.5):
 
 def photometers_location_id(connection, name_mac_list, location_id):
     cursor = connection.cursor()
-    result = list()
+    result = []
     for row in name_mac_list:
         params = {
             "name": row["name"],
@@ -313,7 +313,7 @@ def photometers_location_id(connection, name_mac_list, location_id):
         }
         cursor.execute(
             """
-            SELECT :name, mac_address, :valid_state, tess_id, location_id, valid_state 
+            SELECT :name, mac_address, :valid_state, tess_id, location_id, valid_state
             FROM tess_t
             WHERE mac_address = :mac
             AND location_id = :location_id
@@ -335,7 +335,7 @@ def photometers_location_id(connection, name_mac_list, location_id):
 
 def photometers_observer_id(connection, name_mac_list, observer_id):
     cursor = connection.cursor()
-    result = list()
+    result = []
     for row in name_mac_list:
         params = {
             "name": row["name"],
@@ -345,7 +345,7 @@ def photometers_observer_id(connection, name_mac_list, observer_id):
         }
         cursor.execute(
             """
-            SELECT :name, mac_address, :valid_state, tess_id, observer_id, valid_state 
+            SELECT :name, mac_address, :valid_state, tess_id, observer_id, valid_state
             FROM tess_t
             WHERE mac_address = :mac
             AND observer_id = :observer_id
@@ -421,7 +421,7 @@ def name_mac_next_related_history_sql(name):
 
 def name_mac_previous_related_history(connection, start_tstamp, name, mac):
     cursor = connection.cursor()
-    history = list()
+    history = []
     params = {"tstamp": start_tstamp, "name": name, "mac": mac}
     sql = name_mac_previous_related_history_sql(name)
     complicated = False
@@ -452,7 +452,7 @@ def name_mac_previous_related_history(connection, start_tstamp, name, mac):
 
 def name_mac_next_related_history(connection, end_tstamp, name, mac):
     cursor = connection.cursor()
-    history = list()
+    history = []
     params = {"tstamp": end_tstamp, "name": name, "mac": mac}
     sql = name_mac_next_related_history_sql(name)
     complicated = False
@@ -487,8 +487,8 @@ def name_mac_current_history(connection, name, mac):
     sql = name_mac_current_history_sql(name)
     cursor.execute(sql, params)
     history = [list(item) for item in cursor.fetchall()]
-    break_end_tstamps = list()
-    break_start_tstamps = list()
+    break_end_tstamps = []
+    break_start_tstamps = []
     for i in range(len(history) - 1):
         if history[i][3] != history[i + 1][2]:
             history[i][4] = "-"
@@ -568,7 +568,7 @@ def photometers_not_easy(connection):
 
 
 def photometers_repaired(connection):
-    output = list()
+    output = []
     for row in photometers_not_easy(connection):
         name = row["name"]
         history, break_end_tstamps, break_start_tstamps, truncated = name_mac_current_history(
@@ -592,7 +592,7 @@ def photometers_repaired(connection):
 
 
 def photometers_renamed(connection):
-    output = list()
+    output = []
     for row in photometers_not_easy(connection):
         mac = row["mac"]
         history, break_end_tstamps, break_start_tstamps, truncated = name_mac_current_history(
@@ -674,7 +674,7 @@ def places(connection):
     cursor.execute(
         """
         SELECT longitude, latitude, place, town, sub_region, region, country, timezone, location_id
-        FROM location_t 
+        FROM location_t
         """
     )
     return [
@@ -733,14 +733,14 @@ def _photometers_and_locations_from_tessdb(connection):
     cursor = connection.cursor()
     cursor.execute(
         """
-        SELECT DISTINCT tess_id, name, mac_address, model, firmware, 
+        SELECT DISTINCT tess_id, name, mac_address, model, firmware,
         nchannels, zp1, filter1, zp2, filter2, zp3, filter3, zp4, filter4,
         cover_offset, fov, azimuth, altitude,
         longitude, latitude, place, town, sub_region, country, timezone,
         contact_name, contact_email, organization -- This should be removed at some point
         FROM tess_t AS t
         JOIN location_t USING(location_id)
-        JOIN name_to_mac_t AS n USING (mac_address) 
+        JOIN name_to_mac_t AS n USING (mac_address)
         WHERE n.valid_state = 'Current'
         AND t.valid_state = 'Current'
         AND name LIKE 'stars%'
@@ -855,7 +855,7 @@ def readings(args):
     connection, path = open_database(None, "TESSDB_URL")
     log.info("Connecting to SQLite database %s", path)
     name_mac_list = selected_name_mac_list(connection, classification)
-    result = list()
+    result = []
     if args.unknown_location:
         generator = readings_unknown_location
     elif args.unknown_observer:
@@ -957,7 +957,7 @@ def check_fake_zero_points(connection, classification):
 
 def check_proper_macs(connection, classification):
     name_mac_list = selected_name_mac_list(connection, classification)
-    bad_macs = list()
+    bad_macs = []
     for row in name_mac_list:
         try:
             mac = vmac(row["mac"])
@@ -1074,7 +1074,7 @@ def history(args):
     name = args.name
     mac = args.mac
     header = HEADER_NAME if name is not None else HEADER_MAC
-    global_history = list()
+    global_history = []
     global_history.append(header)
     connection, path = open_database(None, "TESSDB_URL")
     history, break_end_tstamps, break_start_tstamps, truncated = name_mac_current_history(

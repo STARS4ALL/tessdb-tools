@@ -322,7 +322,7 @@ def group_by_coordinates(iterable):
 
 def log_coordinates(coords_iterable):
     """Check for coordinates consistency among phothometers deployed on the same 'place' name"""
-    result = list()
+    result = []
     for coords, rows in coords_iterable.items():
         names = [row["name"] for row in rows]
         if None in coords:

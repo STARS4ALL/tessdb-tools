@@ -152,7 +152,7 @@ def fix(args):
     zptess_dict = group_by_mac(zptess_input_list)
     common_mac_keys = common_A_B_items(tessdb_dict, zptess_dict)
     log.info("Generating SQL statements for %d different MACs", len(common_mac_keys))
-    items = list()
+    items = []
     for mac in sorted(common_mac_keys):
         item = {}
         item["mac"] = mac

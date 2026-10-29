@@ -108,8 +108,8 @@ def _photometers_from_zptess(connection):
     cursor = connection.cursor()
     cursor.execute(
         """
-        SELECT mac, zero_point, session, name, calibration 
-        FROM summary_v 
+        SELECT mac, zero_point, session, name, calibration
+        FROM summary_v
         WHERE name LIKE 'stars%' AND upd_flag = 1
         ORDER BY mac, session
         """
@@ -165,8 +165,8 @@ def generate_common(conn_tessdb, conn_zptess, historic_flag, path):
     zptess_input_list = group_by_mac(zptess_input_list)
     common_macs = common_A_B_items(zptess_input_list, tessdb_input_list)
     log.info("Common entries: %d", len(common_macs))
-    common_list = list()
-    aux_list = list()
+    common_list = []
+    aux_list = []
     # For each photometer we calculate the cartesian product
     for key in common_macs:
         tdblen = len(tessdb_input_list[key])
@@ -219,7 +219,7 @@ def generate_tessdb(conn_tessdb, conn_zptess, historic_flag, path):
     zptess_input_list = group_by_mac(zptess_input_list)
     only_tessdb_macs = in_A_not_in_B(tessdb_input_list, zptess_input_list)
     log.info("TESSDB MACs only, entries: %d", len(only_tessdb_macs))
-    only_tessdb_list = list()
+    only_tessdb_list = []
     # For each photometer we calculate the cartesian product
     for key in only_tessdb_macs:
         tdblen = len(tessdb_input_list[key])
@@ -246,7 +246,7 @@ def generate_zptess(conn_tessdb, conn_zptess, historic_flag, path):
     zptess_input_list = group_by_mac(zptess_input_list)
     only_zptess_macs = in_A_not_in_B(zptess_input_list, tessdb_input_list)
     log.info("ZPTESS MACs only, entries: %d", len(only_zptess_macs))
-    only_zptess_list = list()
+    only_zptess_list = []
     # For each photometer we calculate the cartesian product
     for key in only_zptess_macs:
         zptlen = len(zptess_input_list[key])

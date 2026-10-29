@@ -97,7 +97,7 @@ def similar_locations_csv(iterable, path):
 
 def common_mac_check(keys, mongo_iterable, tessdb_iterable):
     log.info("comparing %d keys", len(keys))
-    result = list()
+    result = []
     for key in sorted(keys):
         if len(mongo_iterable[key]) > 1:
             log.warning("Skippiing %s because it is duplicated: %s", key, mongo_iterable[key])
@@ -117,7 +117,7 @@ def common_mac_check(keys, mongo_iterable, tessdb_iterable):
 
 def common_zp_check(keys, mongo_iterable, tessdb_iterable):
     log.info("comparing %d keys", len(keys))
-    result = list()
+    result = []
     for key in sorted(keys):
         if len(mongo_iterable[key]) > 1:
             log.warning("Skippiing %s because it is duplicated: %s", key, mongo_iterable[key])
@@ -140,7 +140,7 @@ def common_zp_check(keys, mongo_iterable, tessdb_iterable):
 
 
 def upd_mongo_field(mongo_dict, tessdb_dict, field):
-    result = list()
+    result = []
     for key, row in mongo_dict.items():
         mongo_field = row[0][field]
         tessdb_field = tessdb_dict[key][0][field]
@@ -427,7 +427,7 @@ def coordinates(args):
     mongo_input_map = by_coordinates(mdb.mongo_get_location_info(url))
     log.info("reading items from TessDB")
     tessdb_input_map = by_coordinates(places_from_tessdb(connection))
-    output = list()
+    output = []
     for i, (mongo_coords, mongo_items) in enumerate(mongo_input_map.items()):
         nearby_filter = make_nearby_filter(mongo_coords, args.lower, args.upper)
         nearby_list = list(filter(nearby_filter, tessdb_input_map))
@@ -501,7 +501,7 @@ def quote_for_sql(row):
 
 
 def same_mac_filter(mdb_input_dict, tdb_input_dict):
-    result = list()
+    result = []
     for name in sorted(mdb_input_dict.keys()):
         mongo_mac = mdb_input_dict[name][0]["mac"]
         tessdb_mac = tdb_input_dict[name][0]["mac"]
