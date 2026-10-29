@@ -548,7 +548,7 @@ def photometers_not_easy(connection):
         SELECT name, mac_address, valid_since, valid_until, valid_state
         FROM name_to_mac_t
         WHERE mac_address IN (
-            -- Photometers with with substitution
+            -- Photometers with with substitution/repair
             SELECT mac_address FROM name_to_mac_t
             WHERE name IN (SELECT name FROM name_to_mac_t GROUP BY name HAVING COUNT(name) > 1)
             UNION -- This is the renamings part
