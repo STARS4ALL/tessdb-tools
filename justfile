@@ -51,3 +51,19 @@ publish pkg:
     module="${pkg//-/_}"
     uvx uv-publish ${pkg} --verbose "dist/${pkg}/*"
     uv run --with ${pkg} --no-project python -c "from ${module} import __version__; print(__version__)"
+
+# ----------
+# Operations
+# ----------
+
+easy:
+    uv run tess-db --console --log-file easy.log photometer --easy
+
+repaired:
+    uv run tess-db --console --log-file repaired.log photometer --repaired
+
+renamed:
+    uv run tess-db --console --log-file renamed.log photometer --renamed
+
+complicated:
+    uv run tess-db --console --log-file complicated.log photometer --complicated

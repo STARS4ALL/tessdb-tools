@@ -1017,7 +1017,7 @@ def log_detailed_impact(connection, coords_iterable):
 
 
 def photometers(args):
-    log.info(" ====================== ANALIZING TESSDB LOCATION METADATA ======================")
+    log.info(" ====================== ANALIZING TESSDB PHOTOMETER METADATA ======================")
     connection, path = open_database(None, "TESSDB_URL")
     log.info("Connecting to SQLite database %s", path)
     to_console = args.output_file is None
